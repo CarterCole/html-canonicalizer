@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dashboard</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; border: 0 solid #e5e7eb; }
+  html { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.5; }
+  body { margin: 0; background: #0f172a; color: #e2e8f0; }
+  a { color: inherit; text-decoration: none; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  h1, h2, p { margin: 0; }
+  .app { display: grid; grid-template-columns: 220px 1fr; min-height: 640px; }
+  .sidebar { background: #111827; border-right-width: 1px; border-color: #1f2937; padding: 16px 12px; }
+  .brand { display: flex; align-items: center; gap: 8px; padding: 4px 8px 16px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand svg { width: 22px; height: 22px; color: #38bdf8; }
+  .nav li + li { margin-top: 2px; }
+  .nav a { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; font-size: 14px; color: #94a3b8; }
+  .nav a.active { background: #1e293b; color: #f8fafc; }
+  .nav a::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .6; }
+  .nav .count { margin-left: auto; font-size: 11px; background: #334155; color: #cbd5e1; border-radius: 999px; padding: 0 7px; line-height: 18px; }
+  .main { padding: 24px 28px; min-width: 0; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .topbar h1 { font-size: 22px; line-height: 28px; font-weight: 600; }
+  .search { position: relative; }
+  .search input { width: 240px; height: 34px; border-width: 1px; border-color: #334155; border-radius: 8px; background: #0b1220; color: #e2e8f0; padding: 0 10px 0 30px; font: inherit; font-size: 13px; }
+  .search input::placeholder { color: #7c8aa0; font-style: italic; opacity: 1; }
+  .search::before { content: "⌕"; position: absolute; left: 10px; top: 4px; color: #64748b; font-size: 16px; }
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
+  .stat { position: relative; background: linear-gradient(180deg, #1e293b, #172033); border-width: 1px; border-color: #334155; border-radius: 12px; padding: 16px; overflow: hidden; }
+  .stat__label { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; }
+  .stat__value { margin-top: 6px; font-size: 28px; line-height: 34px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat__delta { position: absolute; top: 14px; right: 14px; font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; }
+  .up { color: #4ade80; background: rgba(74, 222, 128, .12); }
+  .down { color: #f87171; background: rgba(248, 113, 113, .12); }
+  .stat__bar { margin-top: 12px; height: 6px; border-radius: 3px; background: #0b1220; }
+  .stat__bar > i { display: block; height: 100%; border-radius: 3px; background: #38bdf8; }
+  .panel { background: #111827; border-width: 1px; border-color: #1f2937; border-radius: 12px; }
+  .panel__head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom-width: 1px; border-color: #1f2937; }
+  .panel__head h2 { font-size: 15px; font-weight: 600; }
+  .panel__head select { margin-left: auto; font: inherit; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-weight: 500; color: #94a3b8; padding: 10px 16px; border-bottom-width: 1px; border-color: #1f2937; }
+  td { padding: 10px 16px; border-bottom-width: 1px; border-color: #1f2937; }
+  tr:last-child td { border-bottom-width: 0; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 1px 8px; border-radius: 999px; font-size: 12px; background: #1e293b; }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
+  .pill.warn::before { background: #fbbf24; }
+  .who { display: flex; align-items: center; gap: 8px; }
+  .avatar { width: 24px; height: 24px; border-radius: 50%; background: #38bdf8; color: #0f172a; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+  .tooltip { position: absolute; visibility: hidden; opacity: 0; }
+  .offscreen { position: absolute; left: -9999px; }
+</style>
+</head>
+<body>
+<div id="app" class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+      <span>Pulse</span>
+    </div>
+    <nav>
+      <ul class="nav">
+        <li><a class="active" href="#"><span>Overview</span></a></li>
+        <li><a href="#"><span>Deployments</span><span class="count">12</span></a></li>
+        <li><a href="#"><span>Incidents</span><span class="count">3</span></a></li>
+        <li><a href="#"><span>Settings</span></a></li>
+      </ul>
+    </nav>
+    <a class="offscreen" href="#main">Skip to content</a>
+  </aside>
+  <main class="main" id="main">
+    <div class="topbar">
+      <div><div><h1>Overview</h1></div></div>
+      <div class="search"><input type="text" placeholder="Search services"></div>
+    </div>
+    <section class="stats">
+      <div class="stat">
+        <div class="stat__label">Requests</div>
+        <div class="stat__value">1,284,112</div>
+        <span class="stat__delta up">+8.2%</span>
+        <div class="stat__bar"><i style="width: 72%"></i></div>
+        <div class="tooltip">Requests in the last 24 hours</div>
+      </div>
+      <div class="stat">
+        <div class="stat__label">Error rate</div>
+        <div class="stat__value">0.42%</div>
+        <span class="stat__delta down">+0.1%</span>
+        <div class="stat__bar"><i style="width: 18%; background: #f87171"></i></div>
+      </div>
+      <div class="stat">
+        <div class="stat__label">p95 latency</div>
+        <div class="stat__value">212 ms</div>
+        <span class="stat__delta up">−14 ms</span>
+        <div class="stat__bar"><i style="width: 46%"></i></div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="panel__head">
+        <h2>Recent deployments</h2>
+        <select><option>Last 7 days</option><option selected>Last 30 days</option></select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Service</th><th>Owner</th><th>Status</th><th class="num">Duration</th></tr></thead>
+          <tbody>
+            <tr><td><b>api-gateway</b></td><td><div class="who"><span class="avatar">MR</span><span>M. Rivera</span></div></td><td><span class="pill">Healthy</span></td><td class="num">2m 14s</td></tr>
+            <tr><td><b>billing</b></td><td><div class="who"><span class="avatar" style="background:#f472b6">JO</span><span>J. Okafor</span></div></td><td><span class="pill warn">Degraded</span></td><td class="num">5m 02s</td></tr>
+            <tr><td><b>search-indexer</b></td><td><div class="who"><span class="avatar" style="background:#a78bfa">TL</span><span>T. Lindqvist</span></div></td><td><span class="pill">Healthy</span></td><td class="num">1m 47s</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+</body>
+</html>

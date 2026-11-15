@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Editor output</title>
+<style>
+  body { margin: 24px; font: 16px/1.6 Georgia, "Times New Roman", serif; color: #222; }
+  .doc { max-width: 640px; }
+  .c1 { font-weight: 700; }
+  .c2 { font-style: italic; }
+  .c3 { color: #1a0dab; text-decoration: underline; }
+  .c4 { background-color: #fff3a3; }
+  .c7 { font-size: 11pt; }
+  .title { font-size: 26pt; line-height: 1.2; margin: 0 0 4pt; }
+  .subtitle { font-size: 13pt; color: #666; margin: 0 0 16pt; }
+  p { margin: 0 0 11pt; }
+  ol { margin: 0 0 11pt; padding-left: 36pt; }
+  li { margin: 0; padding-left: 0; }
+  blockquote { margin: 0 0 11pt; padding: 2pt 12pt; border-left: 3px solid #bbb; color: #555; }
+  code { font-family: Menlo, Consolas, monospace; font-size: 13px; background: #f2f2f2; padding: 1px 4px; border-radius: 3px; }
+  table { border-collapse: collapse; margin: 0 0 11pt; }
+  td, th { border: 1px solid #ccc; padding: 4pt 8pt; text-align: left; }
+  th { background: #f5f5f5; }
+</style>
+</head>
+<body>
+<div class="doc" id="doc">
+  <div><div dir="ltr"><span><span>
+    <h1 class="title"><span class="c7" style="font-size:26pt"><span>Release notes</span></span></h1>
+    <p class="subtitle"><span><span>Version </span></span><span><span>4.2</span></span><span> — </span><span><span>spring</span></span><span> </span><span>update</span></p>
+  </span></span></div></div>
+  <p><span class="c7"><span>This </span></span><span class="c7"><span class="c1">release</span></span><span class="c7"> </span><span class="c7"><span>focuses </span></span><span class="c7">on <span class="c2">stability</span></span><span class="c7"> and <span class="c2"></span></span><span class="c7"><span class="c1">speed</span><span class="c1">ier</span><span class="c1"> builds</span></span><span class="c7">. See the </span><a class="c3" href="#"><span class="c7"><span>migration guide</span></span></a><span class="c7"> for details, or <span class="c4">skip ahead</span><span></span> to the table.</span></p>
+  <ol>
+    <li><span><span>Faster incremental builds</span></span></li>
+    <li><span>Smaller </span><span><code>target/</code></span><span> directory</span></li>
+    <li><span><span><span>Clearer error messages</span></span></span><br><span style="font-size:12px;color:#777">with suggestions inline</span></li>
+  </ol>
+  <blockquote><div><div><span>“It just got out of my way.”</span></div></div></blockquote>
+  <div><div>
+    <table>
+      <tbody>
+        <tr><th><span>Target</span></th><th><span><span>Before</span></span></th><th><span>After</span></th></tr>
+        <tr><td><span>debug</span></td><td><span>41 s</span></td><td><span class="c1"><span>17 s</span></span></td></tr>
+        <tr><td><span>release</span></td><td colspan="2"><span>unchanged</span></td></tr>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+</body>
+</html>

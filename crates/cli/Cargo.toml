@@ -1,0 +1,22 @@
+[package]
+name = "canon"
+description = "HTML canonicalizer: recreate a block of HTML with the fewest elements and the least CSS, verified against the original render."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "canon"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.104"
+base64 = "0.23.1"
+canon-core = { path = "../core" }
+clap = { version = "4.5.61", features = ["derive"] }
+png = "0.18.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tempfile = "3.27.0"
+tungstenite = "0.29.0"
+url = "2.5.8"

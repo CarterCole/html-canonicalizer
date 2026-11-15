@@ -1,0 +1,9 @@
+target/
+.DS_Store
+*.png.tmp
+# wasm-bindgen output; web/build.sh regenerates it and copies what is needed into web/dist
+web/pkg/
+# local scratch inputs and outputs
+example.html
+example.min.html
+example.png
