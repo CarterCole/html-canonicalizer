@@ -107,6 +107,12 @@ struct Args {
     #[arg(long, value_name = "PNG")]
     screenshot_result: Option<PathBuf>,
 
+    /// Save the original, the recreated element and their differences side by side; the
+    /// before and after pictures are saved next to it (NAME-before.png, NAME-after.png)
+    /// unless --screenshot / --screenshot-result say where
+    #[arg(long, value_name = "PNG")]
+    compare: Option<PathBuf>,
+
     /// Save a picture of the differing pixels, if any
     #[arg(long, value_name = "PNG")]
     diff: Option<PathBuf>,
@@ -831,6 +837,30 @@ fn run(args: &Args) -> Result<i32> {
         (Some(a), Some(b)) => Some(pixel::diff(a, b, args.tolerance)),
         _ => None,
     };
+    if let Some(p) = &args.compare {
+        match (&source_image, &verdict.image) {
+            (Some(a), Some(b)) => {
+                let d = pixel::diff(a, b, args.tolerance);
+                let diff_caption = if d.exact() { "DIFF: NONE".to_string() } else { format!("DIFF: {} PX", d.different) };
+                let before_caption = format!("BEFORE: {} ELEMENTS", eng.source_elems);
+                let after_caption = format!("AFTER: {} ELEMENTS", fin.elements);
+                let diff_img = pixel::diff_image(a, b, args.tolerance);
+                let sheet = pixel::side_by_side(&[(a, &before_caption), (b, &after_caption), (&diff_img, &diff_caption)]);
+                std::fs::write(p, pixel::encode(&sheet)?).with_context(|| format!("cannot write {}", p.display()))?;
+                let sibling = |suffix: &str| {
+                    let stem = p.file_stem().map(|s| s.to_string_lossy().into_owned()).unwrap_or_else(|| "compare".into());
+                    p.with_file_name(format!("{stem}-{suffix}.png"))
+                };
+                if args.screenshot.is_none() {
+                    std::fs::write(sibling("before"), pixel::encode(a)?)?;
+                }
+                if args.screenshot_result.is_none() {
+                    std::fs::write(sibling("after"), pixel::encode(b)?)?;
+                }
+            }
+            _ => warnings.push("no comparison could be made (--no-verify, or the result did not parse as written)".into()),
+        }
+    }
     if let Some(p) = &args.screenshot_result {
         match &verdict.image {
             Some(img) => std::fs::write(p, pixel::encode(img)?).with_context(|| format!("cannot write {}", p.display()))?,

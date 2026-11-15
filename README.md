@@ -77,6 +77,7 @@ Useful options (`canon --help` has all of them):
 | `--no-reduce` | keep every element, only minimise the CSS |
 | `--tolerance <n>` | per-channel difference a pixel may have and still count as equal (default 0) |
 | `--screenshot`, `--screenshot-result` | save a picture of the original element, and of the recreated one |
+| `--compare out.png` | before, after and their differences side by side; also saves `out-before.png` and `out-after.png` |
 | `--diff`, `--report` | save the differing pixels, a JSON report |
 | `--time-limit <s>` | stop reducing after this long and keep what is verified (default 120) |
 
