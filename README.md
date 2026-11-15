@@ -76,7 +76,8 @@ Useful options (`canon --help` has all of them):
 | `--viewport 1280x800`, `--dpr 1`, `--color-scheme light` | how the page is rendered |
 | `--no-reduce` | keep every element, only minimise the CSS |
 | `--tolerance <n>` | per-channel difference a pixel may have and still count as equal (default 0) |
-| `--screenshot`, `--diff`, `--report` | save the reference picture, the differing pixels, a JSON report |
+| `--screenshot`, `--screenshot-result` | save a picture of the original element, and of the recreated one |
+| `--diff`, `--report` | save the differing pixels, a JSON report |
 | `--time-limit <s>` | stop reducing after this long and keep what is verified (default 120) |
 
 Exit status: `0` the result is verified identical, `2` differences remain (they are

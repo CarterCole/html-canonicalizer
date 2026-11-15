@@ -103,6 +103,10 @@ struct Args {
     #[arg(long, value_name = "PNG")]
     screenshot: Option<PathBuf>,
 
+    /// Save a screenshot of the recreated element (as rendered for the final check)
+    #[arg(long, value_name = "PNG")]
+    screenshot_result: Option<PathBuf>,
+
     /// Save a picture of the differing pixels, if any
     #[arg(long, value_name = "PNG")]
     diff: Option<PathBuf>,
@@ -827,6 +831,12 @@ fn run(args: &Args) -> Result<i32> {
         (Some(a), Some(b)) => Some(pixel::diff(a, b, args.tolerance)),
         _ => None,
     };
+    if let Some(p) = &args.screenshot_result {
+        match &verdict.image {
+            Some(img) => std::fs::write(p, pixel::encode(img)?).with_context(|| format!("cannot write {}", p.display()))?,
+            None => warnings.push("no screenshot of the result was taken (--no-verify, or the result did not parse as written)".into()),
+        }
+    }
     if let (Some(p), Some(a), Some(b)) = (&args.diff, &source_image, &verdict.image) {
         if !vs_source.is_some_and(|d| d.exact()) {
             std::fs::write(p, pixel::diff_png(a, b, args.tolerance)?).with_context(|| format!("cannot write {}", p.display()))?;
